@@ -29,6 +29,31 @@ def scale_color(color, factor):
     )
 
 
+def hsv_to_rgb(h, s, v):
+    """Convert HSV (h=0-360, s=0-1, v=0-1) to RGB tuple."""
+    h = h % 360
+    c = v * s
+    x = c * (1 - abs((h / 60) % 2 - 1))
+    m = v - c
+    if h < 60:
+        r, g, b = c, x, 0
+    elif h < 120:
+        r, g, b = x, c, 0
+    elif h < 180:
+        r, g, b = 0, c, x
+    elif h < 240:
+        r, g, b = 0, x, c
+    elif h < 300:
+        r, g, b = x, 0, c
+    else:
+        r, g, b = c, 0, x
+    return (int((r + m) * 255), int((g + m) * 255), int((b + m) * 255))
+
+
+# ---------------------------------------------------------------------------
+# Original themes
+# ---------------------------------------------------------------------------
+
 OCEAN_DRIFT = {
     "name": "Ocean Drift",
     "description": "Calm, sophisticated, blue-dominant",
@@ -174,6 +199,190 @@ TIME_OF_DAY = {
     },
 }
 
+# ---------------------------------------------------------------------------
+# New themes
+# ---------------------------------------------------------------------------
+
+SUNSET_BOULEVARD = {
+    "name": "Sunset Boulevard",
+    "description": "Warm golden hour gradient",
+    "colors": {
+        "background": (0, 0, 0),
+        "hours": hex_to_rgb("#FFE0B0"),
+        "minutes": hex_to_rgb("#FF7755"),
+        "seconds": hex_to_rgb("#CC4422"),
+        "colon": hex_to_rgb("#FFAA00"),
+        "ampm": hex_to_rgb("#CC6633"),
+        "date": hex_to_rgb("#884422"),
+        "border": hex_to_rgb("#110500"),
+    },
+    "effects": {
+        "border_wave": True,
+        "wave_speed": 0.03,
+        "wave_colors": [
+            hex_to_rgb("#1A0800"),
+            hex_to_rgb("#220A04"),
+            hex_to_rgb("#180610"),
+            hex_to_rgb("#140412"),
+            hex_to_rgb("#1A0800"),
+        ],
+    },
+}
+
+CYBERPUNK_TOKYO = {
+    "name": "Cyberpunk Tokyo",
+    "description": "Hot pink on deep purple, high contrast",
+    "colors": {
+        "background": hex_to_rgb("#06000A"),
+        "hours": hex_to_rgb("#FF1493"),
+        "minutes": hex_to_rgb("#AAFF00"),
+        "seconds": hex_to_rgb("#FF0066"),
+        "colon": (255, 255, 255),
+        "ampm": hex_to_rgb("#AA00FF"),
+        "date": hex_to_rgb("#6600AA"),
+        "border": hex_to_rgb("#06000A"),
+    },
+    "effects": {
+        "pixel_chase": True,
+        "chase_speed": 0.15,
+        "chase_colors": [
+            hex_to_rgb("#FF1493"),
+            hex_to_rgb("#00FFCC"),
+        ],
+    },
+}
+
+FOREST_CANOPY = {
+    "name": "Forest Canopy",
+    "description": "Natural greens, calming",
+    "colors": {
+        "background": (0, 0, 0),
+        "hours": hex_to_rgb("#33FF66"),
+        "minutes": hex_to_rgb("#00CC77"),
+        "seconds": hex_to_rgb("#009955"),
+        "colon": hex_to_rgb("#88FF00"),
+        "ampm": hex_to_rgb("#228844"),
+        "date": hex_to_rgb("#116633"),
+        "border": hex_to_rgb("#001A05"),
+    },
+    "effects": {
+        "shimmer": True,
+        "shimmer_colors": [
+            hex_to_rgb("#001A05"),
+            hex_to_rgb("#002A08"),
+            hex_to_rgb("#00220A"),
+            hex_to_rgb("#001808"),
+        ],
+        "shimmer_speed": 0.04,
+        "shimmer_density": 0.3,
+    },
+}
+
+LAVA_LAMP = {
+    "name": "Lava Lamp",
+    "description": "Slow-morphing warm color blobs",
+    "colors": {
+        "background": (0, 0, 0),
+        "hours": hex_to_rgb("#FF2200"),
+        "minutes": hex_to_rgb("#FF8800"),
+        "seconds": hex_to_rgb("#CC4400"),
+        "colon": hex_to_rgb("#FFDD00"),
+        "ampm": hex_to_rgb("#AA4400"),
+        "date": hex_to_rgb("#882200"),
+        "border": (0, 0, 0),
+    },
+    "effects": {
+        "lava": True,
+        "lava_speed": 0.02,
+        "lava_colors": [
+            hex_to_rgb("#220000"),
+            hex_to_rgb("#331100"),
+            hex_to_rgb("#221000"),
+            hex_to_rgb("#110800"),
+            hex_to_rgb("#2A0500"),
+        ],
+    },
+}
+
+ICE_CRYSTAL = {
+    "name": "Ice Crystal",
+    "description": "Cold whites and pale blues, elegant",
+    "colors": {
+        "background": (0, 0, 0),
+        "hours": hex_to_rgb("#EEFFFF"),
+        "minutes": hex_to_rgb("#88CCFF"),
+        "seconds": hex_to_rgb("#5599CC"),
+        "colon": (255, 255, 255),
+        "ampm": hex_to_rgb("#6699AA"),
+        "date": hex_to_rgb("#446677"),
+        "border": (0, 0, 0),
+    },
+    "effects": {
+        "sparkle": True,
+        "sparkle_color": (180, 220, 255),
+        "sparkle_chance": 0.03,
+    },
+}
+
+RAINBOW_SHIFT = {
+    "name": "Rainbow Shift",
+    "description": "Digits cycle through the full spectrum",
+    "colors": {
+        "background": (0, 0, 0),
+        "hours": (255, 0, 0),
+        "minutes": (0, 255, 0),
+        "seconds": (0, 0, 255),
+        "colon": (255, 255, 255),
+        "ampm": (128, 128, 128),
+        "date": (64, 64, 64),
+        "border": (0, 0, 0),
+    },
+    "effects": {
+        "rainbow": True,
+        "rainbow_speed": 6.0,
+        "rainbow_border": True,
+    },
+}
+
+GREEN_LAVA = {
+    "name": "Green Lava",
+    "description": "Forest canopy digits with green lava blob background",
+    "colors": {
+        "background": (0, 0, 0),
+        "hours": hex_to_rgb("#33FF66"),
+        "minutes": hex_to_rgb("#00CC77"),
+        "seconds": hex_to_rgb("#009955"),
+        "colon": hex_to_rgb("#88FF00"),
+        "ampm": hex_to_rgb("#228844"),
+        "date": hex_to_rgb("#116633"),
+        "border": hex_to_rgb("#001A05"),
+    },
+    "effects": {
+        "lava": True,
+        "lava_speed": 0.02,
+        "lava_colors": [
+            hex_to_rgb("#001A05"),
+            hex_to_rgb("#002A0A"),
+            hex_to_rgb("#003A10"),
+            hex_to_rgb("#00220C"),
+            hex_to_rgb("#001808"),
+        ],
+        "shimmer": True,
+        "shimmer_colors": [
+            hex_to_rgb("#001A05"),
+            hex_to_rgb("#002A08"),
+            hex_to_rgb("#00220A"),
+            hex_to_rgb("#001808"),
+        ],
+        "shimmer_speed": 0.04,
+        "shimmer_density": 0.3,
+    },
+}
+
+# ---------------------------------------------------------------------------
+# Theme registry
+# ---------------------------------------------------------------------------
+
 THEMES = {
     "ocean_drift": OCEAN_DRIFT,
     "ember_glow": EMBER_GLOW,
@@ -181,6 +390,13 @@ THEMES = {
     "minimal_white": MINIMAL_WHITE,
     "aurora_borealis": AURORA_BOREALIS,
     "time_of_day": TIME_OF_DAY,
+    "sunset_boulevard": SUNSET_BOULEVARD,
+    "cyberpunk_tokyo": CYBERPUNK_TOKYO,
+    "forest_canopy": FOREST_CANOPY,
+    "lava_lamp": LAVA_LAMP,
+    "ice_crystal": ICE_CRYSTAL,
+    "rainbow_shift": RAINBOW_SHIFT,
+    "green_lava": GREEN_LAVA,
 }
 
 

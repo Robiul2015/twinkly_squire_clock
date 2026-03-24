@@ -128,7 +128,8 @@ class ClockRunner:
                         except ValueError as e:
                             logger.warning("Invalid theme: %s", e)
 
-                frame = render_clock_frame(theme, now=now, tick_count=tick_count)
+                font = config.get("font", "5x7")
+                frame = render_clock_frame(theme, now=now, tick_count=tick_count, font_name=font)
                 self.transport.push_frame(frame_to_bytes(frame))
                 tick_count += 1
 

@@ -17,6 +17,7 @@ A Python script generates clock frames at 10 FPS and pushes them to the Twinkly 
 ```
 Docker Container (Python)
   └── Render 24x16 frame (HH:MM, 5x7 font, 12h format)
+  └── Apply transition effects (zoom-pulse / burst flash)
   └── Apply permutation map (raster → LED index)
   └── UDP push to Twinkly (port 7777, protocol v3)
 ```
@@ -27,12 +28,34 @@ Switch themes by editing `config/config.yaml` — hot-reloaded every 60 seconds.
 
 | Theme | Description |
 |-------|-------------|
-| `ocean_drift` | Calm cyan-blue with slow wave border animation |
+| `ocean_drift` | Calm cyan-blue with slow wave border |
 | `ember_glow` | Warm fireplace with flickering ember border |
 | `neon_synthwave` | Retro 80s magenta/cyan with gradient sweep |
 | `minimal_white` | Clean white with subtle breathing effect |
 | `aurora_borealis` | Shifting green/purple aurora background |
 | `time_of_day` | Adaptive — gold morning, white day, blue night, dim red sleep |
+| `sunset_boulevard` | Warm golden hour with sunset gradient wave |
+| `cyberpunk_tokyo` | Hot pink/lime on deep purple with pixel chase border |
+| `forest_canopy` | Natural greens with shimmer border |
+| `lava_lamp` | Slow-morphing warm color blobs background |
+| `ice_crystal` | Cold whites and pale blues with sparkle border |
+| `rainbow_shift` | Digits cycle through the full spectrum |
+| `green_lava` | Forest digits with green lava blob background |
+
+## Transition Effects
+
+- **Minute change:** Zoom-pulse — digits scale up 1.4x with brightness boost then settle back (0.6s)
+- **Hour change:** Burst flash — white flash followed by expanding ring shockwave (1.2s)
+
+## Fonts
+
+Three built-in 5x7 pixel fonts, selectable in config:
+
+| Font | Style |
+|------|-------|
+| `5x7` | Classic dot matrix — angular, sharp corners (default) |
+| `5x7r` | Rounded — softer curves, friendlier look |
+| `5x7b` | Bold — thick 2px strokes, high visibility |
 
 ## Quick Start
 
@@ -52,7 +75,7 @@ Switch themes by editing `config/config.yaml` — hot-reloaded every 60 seconds.
 2. Edit `config/config.yaml` with your Twinkly IP address:
    ```yaml
    twinkly_ip: "192.168.1.100"
-   theme: "ocean_drift"
+   theme: "forest_canopy"
    ```
 
 3. Set your timezone in `docker-compose.yml`:
@@ -85,9 +108,10 @@ All settings in `config/config.yaml`:
 
 ```yaml
 twinkly_ip: "192.168.1.100"    # Device IP
-theme: "ocean_drift"           # Active theme
+theme: "forest_canopy"         # Active theme
 brightness: 80                 # Default brightness (0-100)
 fps: 10                        # Frames per second
+font: "5x7"                   # Font: 5x7, 5x7r, 5x7b
 
 # Auto-dim by time of day
 brightness_schedule:
@@ -106,11 +130,11 @@ brightness_schedule:
 ├── config/
 │   └── config.yaml
 └── src/
-    ├── clock.py        # Main loop
-    ├── effects.py      # Background animations
-    ├── fonts.py        # 3x5 and 5x7 pixel fonts
-    ├── renderer.py     # Frame generation
-    ├── themes.py       # Color theme definitions
+    ├── clock.py        # Main loop with hot-reload
+    ├── effects.py      # Background animations (10 effects)
+    ├── fonts.py        # 3x5, 5x7, 5x7r, 5x7b pixel fonts
+    ├── renderer.py     # Frame generation + transition effects
+    ├── themes.py       # 13 color themes
     └── transport.py    # Twinkly connection and LED mapping
 ```
 
@@ -132,7 +156,7 @@ MY_THEME = {
         "date": (60, 60, 60),
         "border": (0, 0, 0),
     },
-    "effects": {},  # Or add border_wave, aurora, etc.
+    "effects": {},  # Or add border_wave, aurora, sparkle, etc.
 }
 ```
 
@@ -144,6 +168,8 @@ Register it in the `THEMES` dict and set `theme: "my_theme"` in config.
 - **Auth:** `hw_address=None` bypasses challenge-response validation for newer firmware
 - **Y-axis:** Inverted in Twinkly coordinates (Y=0 is physical bottom)
 - **Panels:** Serpentine wiring varies per panel; layout API provides exact LED coordinates
+- **Colon:** Always rendered in high-contrast color (auto-forces white if theme colon is too dim)
+- **Transitions:** Zoom-pulse on minute change, burst flash on hour change
 - **Reconnection:** Auto-reconnects with exponential backoff on failure
 - **Graceful shutdown:** SIGTERM sets device back to movie mode
 
