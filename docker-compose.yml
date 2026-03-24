@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  twinkly-clock:
+    build: .
+    container_name: twinkly-clock
+    network_mode: host
+    restart: always
+    environment:
+      - TZ=Australia/Sydney
+      - TWINKLY_IP=192.168.1.100
+    volumes:
+      - ./config:/app/config

@@ -1,0 +1,18 @@
+# Twinkly Squares Wall Clock Configuration
+# Changes to theme are hot-reloaded every 60 seconds (no restart needed).
+
+twinkly_ip: "192.168.1.100"
+
+# Available: ocean_drift, ember_glow, neon_synthwave,
+#            minimal_white, aurora_borealis, time_of_day
+theme: "ocean_drift"
+
+brightness: 80
+fps: 10
+
+# Brightness auto-schedule (24h format)
+brightness_schedule:
+  6: 60
+  8: 80
+  20: 50
+  23: 15
