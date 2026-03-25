@@ -15,7 +15,7 @@ font: "5x7"
 
 # Night mode: dims to night_brightness from night_start until sunrise
 # Sunrise is calculated automatically for your location
-night_brightness: 20    # 20% during night
+night_brightness: 5     # 5% during night
 night_start: 22         # 10 PM
 
 # Your location (for sunrise calculation)
