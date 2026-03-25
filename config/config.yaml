@@ -7,15 +7,26 @@ twinkly_ip: "192.168.1.100"
 #            minimal_white, aurora_borealis, time_of_day
 theme: "forest_canopy"
 
-brightness: 80
+brightness: 95
 fps: 10
 
 # Font: 5x7 (classic), 5x7r (rounded), 5x7b (bold)
 font: "5x7"
 
-# Brightness auto-schedule (24h format)
+# Night mode: dims to night_brightness from night_start until sunrise
+# Sunrise is calculated automatically for your location
+night_brightness: 20    # 20% during night
+night_start: 22         # 10 PM
+
+# Your location (for sunrise calculation)
+location:
+  name: "Sydney"
+  region: "Australia"
+  latitude: 51.4934
+  longitude: 0.0
+  timezone: "Australia/Sydney"
+
+# Daytime brightness schedule (24h format, applies after sunrise)
 brightness_schedule:
-  6: 60
-  8: 80
-  20: 50
-  23: 15
+  8: 95     # 8 AM - full brightness
+  20: 60    # 8 PM - evening dim

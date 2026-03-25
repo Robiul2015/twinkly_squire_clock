@@ -8,9 +8,11 @@ import os
 import signal
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, date
 
 import yaml
+from astral import LocationInfo
+from astral.sun import sun
 
 from renderer import render_clock_frame, frame_to_bytes
 from themes import get_theme, list_themes
@@ -28,7 +30,16 @@ DEFAULT_CONFIG = {
     "theme": "ocean_drift",
     "brightness": 80,
     "fps": 10,
-    "brightness_schedule": {6: 60, 8: 80, 20: 50, 23: 15},
+    "night_brightness": 20,
+    "night_start": 22,           # 10 PM
+    "location": {
+        "name": "Sydney",
+        "region": "Australia",
+        "latitude": 51.4934,
+        "longitude": 0.0,
+        "timezone": "Australia/Sydney",
+    },
+    "brightness_schedule": {8: 80, 20: 50},
 }
 
 
@@ -49,11 +60,52 @@ def load_config():
     return dict(DEFAULT_CONFIG)
 
 
-def apply_brightness_schedule(transport, config, current_hour):
-    """Set brightness based on time-of-day schedule."""
+def get_sunrise_hour(config):
+    """Calculate today's sunrise hour for the configured location."""
+    try:
+        loc_cfg = config.get("location", {})
+        city = LocationInfo(
+            loc_cfg.get("name", "Sydney"),
+            loc_cfg.get("region", "Australia"),
+            loc_cfg.get("timezone", "Australia/Sydney"),
+            loc_cfg.get("latitude", 51.4934),
+            loc_cfg.get("longitude", 0.0),
+        )
+        s = sun(city.observer, date=date.today(), tzinfo=city.timezone)
+        sunrise_hour = s["sunrise"].hour
+        logger.info("Today's sunrise: %s (hour %d)", s["sunrise"].strftime("%H:%M"), sunrise_hour)
+        return sunrise_hour
+    except Exception as e:
+        logger.warning("Sunrise calculation failed: %s. Defaulting to 6 AM.", e)
+        return 6
+
+
+def apply_brightness_schedule(transport, config, now):
+    """Set brightness based on time-of-day with sunrise-aware night dimming.
+
+    10 PM to sunrise: night_brightness (default 20%)
+    After sunrise: follows brightness_schedule
+    """
+    current_hour = now.hour
+    night_start = config.get("night_start", 22)
+    night_brightness = config.get("night_brightness", 20)
+    sunrise_hour = get_sunrise_hour(config)
+
+    # Check if we're in the night window (10 PM -> sunrise)
+    is_night = current_hour >= night_start or current_hour < sunrise_hour
+
+    if is_night:
+        transport.set_brightness(night_brightness)
+        logger.info("Night mode: brightness %d%% (until sunrise ~%d:00)",
+                     night_brightness, sunrise_hour)
+        return
+
+    # Daytime: use the schedule
     schedule = config.get("brightness_schedule")
     if not schedule:
+        transport.set_brightness(config.get("brightness", 80))
         return
+
     brightness = config.get("brightness", 80)
     for hour_str, val in sorted(schedule.items(), key=lambda x: int(x[0])):
         if int(hour_str) <= current_hour:
@@ -102,7 +154,7 @@ class ClockRunner:
             return
 
         logger.info("Clock running!")
-        apply_brightness_schedule(self.transport, config, datetime.now().hour)
+        apply_brightness_schedule(self.transport, config, datetime.now())
 
         tick_count = 0
         frame_interval = 1.0 / config["fps"]
@@ -114,7 +166,7 @@ class ClockRunner:
                 now = datetime.now()
 
                 if now.hour != last_brightness_hour:
-                    apply_brightness_schedule(self.transport, config, now.hour)
+                    apply_brightness_schedule(self.transport, config, now)
                     last_brightness_hour = now.hour
 
                 # Hot-reload theme from config every 60 seconds
