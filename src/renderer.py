@@ -5,12 +5,29 @@ Includes transition effects on minute and hour changes.
 """
 
 import math
+import random
 import time
 from datetime import datetime
 
 from fonts import get_glyph, measure_text
 from themes import scale_color, lerp_color
 from effects import apply_effects, get_adaptive_colors, get_rainbow_colors
+
+# High-contrast colors for the seconds blink indicator
+_HIGH_CONTRAST_COLORS = [
+    (255, 0, 0),       # Red
+    (0, 255, 0),       # Green
+    (0, 100, 255),     # Blue
+    (255, 255, 0),     # Yellow
+    (255, 0, 255),     # Magenta
+    (0, 255, 255),     # Cyan
+    (255, 128, 0),     # Orange
+    (128, 255, 0),     # Lime
+    (255, 0, 128),     # Hot pink
+    (0, 255, 128),     # Spring green
+    (128, 0, 255),     # Purple
+    (255, 255, 255),   # White
+]
 
 WIDTH = 24
 HEIGHT = 16
@@ -258,6 +275,17 @@ def render_clock_frame(theme, now=None, tick_count=0, font_name="5x7"):
     draw_char(frame, get_glyph(mm_str[0], font_name), x, row_y, minutes_color)
     x += 6
     draw_char(frame, get_glyph(mm_str[1], font_name), x, row_y, minutes_color)
+
+    # Seconds blink indicator — random high-contrast color each second
+    blink_on = (now.microsecond < 500000)
+    if blink_on:
+        rng = random.Random(now.second + now.minute * 60 + now.hour * 3600)
+        sec_color = rng.choice(_HIGH_CONTRAST_COLORS)
+        # Draw a 2-pixel dot centered below the time
+        dot_y = row_y + 8  # just below the 7-row digits + 1 gap
+        dot_x = WIDTH // 2 - 1
+        frame[dot_y][dot_x] = sec_color
+        frame[dot_y][dot_x + 1] = sec_color
 
     # Apply transition effects
     hour_progress = _transition.get_hour_progress(now_ts)
