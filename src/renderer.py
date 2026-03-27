@@ -246,13 +246,9 @@ def render_clock_frame(theme, now=None, tick_count=0, font_name="5x7"):
     hours_color = rainbow["hours"] if rainbow else colors["hours"]
     minutes_color = rainbow["minutes"] if rainbow else colors["minutes"]
 
-    if rainbow:
-        colon_color = rainbow["colon"]
-    else:
-        colon_color = colors["colon"]
-        r, g, b = colon_color
-        if r * 0.299 + g * 0.587 + b * 0.114 < 100:
-            colon_color = (255, 255, 255)
+    # Colon color: random high-contrast color each second
+    rng = random.Random(now.second + now.minute * 60 + now.hour * 3600)
+    colon_color = rng.choice(_HIGH_CONTRAST_COLORS)
 
     # Draw HH:MM centered
     row_y = 5
@@ -268,7 +264,6 @@ def render_clock_frame(theme, now=None, tick_count=0, font_name="5x7"):
     draw_char(frame, get_glyph(hh_str[1], font_name), x, row_y, hours_color)
     x += 5
 
-    colon_x = x
     if colon_visible:
         draw_char(frame, get_glyph(":", font_name), x, row_y, colon_color)
     x += 2
@@ -276,14 +271,6 @@ def render_clock_frame(theme, now=None, tick_count=0, font_name="5x7"):
     draw_char(frame, get_glyph(mm_str[0], font_name), x, row_y, minutes_color)
     x += 6
     draw_char(frame, get_glyph(mm_str[1], font_name), x, row_y, minutes_color)
-
-    # Seconds blink indicator — random high-contrast color each second
-    # Positioned below the colon, at the bottom of the display
-    blink_on = (now.microsecond < 500000)
-    if blink_on:
-        rng = random.Random(now.second + now.minute * 60 + now.hour * 3600)
-        sec_color = rng.choice(_HIGH_CONTRAST_COLORS)
-        frame[row_y + 8][colon_x] = sec_color
 
     # Apply transition effects
     hour_progress = _transition.get_hour_progress(now_ts)
