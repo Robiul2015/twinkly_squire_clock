@@ -268,6 +268,7 @@ def render_clock_frame(theme, now=None, tick_count=0, font_name="5x7"):
     draw_char(frame, get_glyph(hh_str[1], font_name), x, row_y, hours_color)
     x += 5
 
+    colon_x = x
     if colon_visible:
         draw_char(frame, get_glyph(":", font_name), x, row_y, colon_color)
     x += 2
@@ -277,15 +278,12 @@ def render_clock_frame(theme, now=None, tick_count=0, font_name="5x7"):
     draw_char(frame, get_glyph(mm_str[1], font_name), x, row_y, minutes_color)
 
     # Seconds blink indicator — random high-contrast color each second
+    # Positioned below the colon, at the bottom of the display
     blink_on = (now.microsecond < 500000)
     if blink_on:
         rng = random.Random(now.second + now.minute * 60 + now.hour * 3600)
         sec_color = rng.choice(_HIGH_CONTRAST_COLORS)
-        # Draw a 2-pixel dot centered below the time
-        dot_y = row_y + 8  # just below the 7-row digits + 1 gap
-        dot_x = WIDTH // 2 - 1
-        frame[dot_y][dot_x] = sec_color
-        frame[dot_y][dot_x + 1] = sec_color
+        frame[row_y + 8][colon_x] = sec_color
 
     # Apply transition effects
     hour_progress = _transition.get_hour_progress(now_ts)
