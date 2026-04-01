@@ -29,6 +29,20 @@ _HIGH_CONTRAST_COLORS = [
     (255, 255, 255),   # White
 ]
 
+# Clockwise seconds ring: 68 pixels on the second line from the edge (row 1, row 14, col 1, col 22)
+# Starts at middle-top (row 1, col 12) and travels clockwise
+_SECONDS_RING = []
+for _x in range(12, 23):        # Right half of top row (col 12→22)
+    _SECONDS_RING.append((1, _x))
+for _y in range(2, 14):         # Right col down (row 2→13)
+    _SECONDS_RING.append((_y, 22))
+for _x in range(22, 0, -1):     # Bottom row left (col 22→1)
+    _SECONDS_RING.append((14, _x))
+for _y in range(13, 1, -1):     # Left col up (row 13→2)
+    _SECONDS_RING.append((_y, 1))
+for _x in range(1, 12):         # Left half of top row (col 1→11)
+    _SECONDS_RING.append((1, _x))
+
 WIDTH = 24
 HEIGHT = 16
 
@@ -284,6 +298,14 @@ def render_clock_frame(theme, now=None, tick_count=0, font_name="5x7"):
 
     # Apply theme background effects
     apply_effects(frame, WIDTH, HEIGHT, theme, now_ts, tick_count)
+
+    # Draw seconds ring: clockwise fill, one color per minute
+    ring_rng = random.Random(now.minute + now.hour * 60)
+    ring_color = ring_rng.choice(_HIGH_CONTRAST_COLORS)
+    pixels_lit = min(len(_SECONDS_RING), int(len(_SECONDS_RING) * (now.second + 1) / 60))
+    for i in range(pixels_lit):
+        ry, rx = _SECONDS_RING[i]
+        frame[ry][rx] = ring_color
 
     return frame
 
