@@ -1,0 +1,17 @@
+[Unit]
+Description=Twinkly Squares Wall Clock
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/twinkly-clock/src
+ExecStart=/home/pi/twinkly-clock/venv/bin/python -u clock.py
+Restart=always
+RestartSec=10
+StartLimitIntervalSec=0
+Environment=TZ=Australia/Sydney
+
+[Install]
+WantedBy=multi-user.target
