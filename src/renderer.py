@@ -264,48 +264,54 @@ def render_clock_frame(theme, now=None, tick_count=0, font_name="5x7"):
     rng = random.Random(now.second + now.minute * 60 + now.hour * 3600)
     colon_color = rng.choice(_HIGH_CONTRAST_COLORS)
 
-    # Draw HH:MM centered
-    row_y = 5
-    two_digit = (hh_str[0] != " ")
-
-    if two_digit:
-        x = 0
-        draw_char(frame, get_glyph(hh_str[0], font_name), x, row_y, hours_color)
-        x += 6
-    else:
-        x = 3
-
-    draw_char(frame, get_glyph(hh_str[1], font_name), x, row_y, hours_color)
-    x += 5
-
-    if colon_visible:
-        draw_char(frame, get_glyph(":", font_name), x, row_y, colon_color)
-    x += 2
-
-    draw_char(frame, get_glyph(mm_str[0], font_name), x, row_y, minutes_color)
-    x += 6
-    draw_char(frame, get_glyph(mm_str[1], font_name), x, row_y, minutes_color)
-
-    # Apply transition effects
-    hour_progress = _transition.get_hour_progress(now_ts)
-    minute_progress = _transition.get_minute_progress(now_ts)
-
-    if hour_progress >= 0:
-        # Hour burst takes priority
-        _apply_hour_burst(frame, hour_progress)
-    elif minute_progress >= 0:
-        _apply_minute_zoom(frame, minute_progress)
-
-    # Apply theme background effects
+    # Apply theme background effects first (behind everything)
     apply_effects(frame, WIDTH, HEIGHT, theme, now_ts, tick_count)
 
-    # Draw seconds ring: clockwise fill, one color per minute
-    ring_rng = random.Random(now.minute + now.hour * 60)
-    ring_color = ring_rng.choice(_HIGH_CONTRAST_COLORS)
+    # Draw seconds ring on top of background effects
+    ring_color = (49, 71, 14)  # dark olive green
     pixels_lit = min(len(_SECONDS_RING), int(len(_SECONDS_RING) * (now.second + 1) / 60))
     for i in range(pixels_lit):
         ry, rx = _SECONDS_RING[i]
         frame[ry][rx] = ring_color
+
+    # Draw HH:MM on top of effects and ring so digits are never overwritten
+    row_y = 5
+    two_digit = (hh_str[0] != " ")
+
+    if two_digit:
+        # Compact layout: x=1..21, no inter-digit gaps, colon 1px advance
+        # Keeps digits clear of border (col 0/23) and fully inside the ring
+        x = 1
+        draw_char(frame, get_glyph(hh_str[0], font_name), x, row_y, hours_color)
+        x += 5
+        draw_char(frame, get_glyph(hh_str[1], font_name), x, row_y, hours_color)
+        x += 5
+        if colon_visible:
+            draw_char(frame, get_glyph(":", font_name), x, row_y, colon_color)
+        x += 1
+        draw_char(frame, get_glyph(mm_str[0], font_name), x, row_y, minutes_color)
+        x += 5
+        draw_char(frame, get_glyph(mm_str[1], font_name), x, row_y, minutes_color)
+    else:
+        # Single digit: centered layout (unchanged)
+        x = 3
+        draw_char(frame, get_glyph(hh_str[1], font_name), x, row_y, hours_color)
+        x += 5
+        if colon_visible:
+            draw_char(frame, get_glyph(":", font_name), x, row_y, colon_color)
+        x += 2
+        draw_char(frame, get_glyph(mm_str[0], font_name), x, row_y, minutes_color)
+        x += 6
+        draw_char(frame, get_glyph(mm_str[1], font_name), x, row_y, minutes_color)
+
+    # Apply transition effects last so they affect digits + ring together
+    hour_progress = _transition.get_hour_progress(now_ts)
+    minute_progress = _transition.get_minute_progress(now_ts)
+
+    if hour_progress >= 0:
+        _apply_hour_burst(frame, hour_progress)
+    elif minute_progress >= 0:
+        _apply_minute_zoom(frame, minute_progress)
 
     return frame
 
