@@ -4,8 +4,8 @@
 twinkly_ip: "192.168.1.100"
 
 # Available: ocean_drift, ember_glow, neon_synthwave,
-#            minimal_white, aurora_borealis, time_of_day
-theme: "forest_canopy"
+#            minimal_white, aurora_borealis, time_of_day, matrix_terminal
+theme: "matrix_terminal"
 
 brightness: 95
 fps: 10

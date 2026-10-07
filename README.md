@@ -41,6 +41,7 @@ Switch themes by editing `config/config.yaml` — hot-reloaded every 60 seconds.
 | `ice_crystal` | Cold whites and pale blues with sparkle border |
 | `rainbow_shift` | Digits cycle through the full spectrum |
 | `green_lava` | Forest digits with green lava blob background |
+| `matrix_terminal` | Phosphor-green terminal with scanlines and falling code rain |
 
 ## Transition Effects
 

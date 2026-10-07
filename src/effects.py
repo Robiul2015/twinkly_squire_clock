@@ -31,6 +31,10 @@ def apply_effects(frame, width, height, theme, now_ts, tick_count):
         _apply_sparkle(frame, width, height, effects, tick_count)
     if effects.get("rainbow_border"):
         _apply_rainbow_border(frame, width, height, effects, now_ts)
+    if effects.get("matrix_rain"):
+        _apply_matrix_rain(frame, width, height, effects, now_ts)
+    if effects.get("scanlines"):
+        _apply_scanlines(frame, width, height, effects)
 
 
 def get_rainbow_colors(theme, now_ts):
@@ -235,6 +239,35 @@ def _apply_sparkle(frame, width, height, effects, tick_count):
             if random.random() < chance:
                 bright = random.uniform(0.4, 1.0)
                 frame[y][x] = scale_color(color, bright)
+
+
+def _apply_matrix_rain(frame, width, height, effects, now_ts):
+    """Falling code-rain streaks, one per column, each with a bright head and fading trail."""
+    color = effects.get("rain_color", (23, 201, 74))
+    speed = effects.get("rain_speed", 4.5)
+    trail = effects.get("rain_trail", 5)
+    cycle = height + trail
+
+    for x in range(width):
+        col_offset = (x * 37 + (x * x) * 11) % cycle
+        head = (now_ts * speed + col_offset) % cycle - trail
+        for t in range(trail + 1):
+            y = int(head) - t
+            if 0 <= y < height and frame[y][x] == (0, 0, 0):
+                bright = 1.0 if t == 0 else max(0.0, 1.0 - t / trail) * 0.5
+                frame[y][x] = scale_color(color, 0.08 + 0.4 * bright)
+
+
+def _apply_scanlines(frame, width, height, effects):
+    """Faint horizontal bands on every Nth row, CRT-style."""
+    tint = effects.get("scanline_color", (0, 20, 10))
+    period = effects.get("scanline_period", 3)
+
+    for y in range(height):
+        if y % period == 1:
+            for x in range(width):
+                if frame[y][x] == (0, 0, 0):
+                    frame[y][x] = tint
 
 
 def _apply_rainbow_border(frame, width, height, effects, now_ts):

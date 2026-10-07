@@ -344,6 +344,30 @@ RAINBOW_SHIFT = {
     },
 }
 
+MATRIX_TERMINAL = {
+    "name": "Matrix Terminal",
+    "description": "Phosphor-green terminal with scanlines and falling code rain",
+    "colors": {
+        "background": (0, 0, 0),
+        "hours": hex_to_rgb("#39FF6A"),
+        "minutes": hex_to_rgb("#1FCC50"),
+        "seconds": hex_to_rgb("#0E7A30"),
+        "colon": hex_to_rgb("#AFFFC0"),
+        "ampm": hex_to_rgb("#167A36"),
+        "date": hex_to_rgb("#0B4A20"),
+        "border": (0, 0, 0),
+    },
+    "effects": {
+        "matrix_rain": True,
+        "rain_color": hex_to_rgb("#17C94A"),
+        "rain_speed": 4.5,
+        "rain_trail": 5,
+        "scanlines": True,
+        "scanline_color": hex_to_rgb("#021407"),
+        "scanline_period": 3,
+    },
+}
+
 GREEN_LAVA = {
     "name": "Green Lava",
     "description": "Forest canopy digits with green lava blob background",
@@ -397,6 +421,7 @@ THEMES = {
     "ice_crystal": ICE_CRYSTAL,
     "rainbow_shift": RAINBOW_SHIFT,
     "green_lava": GREEN_LAVA,
+    "matrix_terminal": MATRIX_TERMINAL,
 }
 
 

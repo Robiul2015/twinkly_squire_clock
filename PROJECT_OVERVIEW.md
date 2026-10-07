@@ -45,7 +45,7 @@ config.yaml → Clock Main Loop (10 FPS)
 
 ---
 
-## Themes (13 total)
+## Themes (14 total)
 
 | Theme | Hours | Minutes | Effect |
 |---|---|---|---|
@@ -62,6 +62,7 @@ config.yaml → Clock Main Loop (10 FPS)
 | `ice_crystal` | Pale white | Light blue | Random sparkle flashes |
 | `rainbow_shift` | Cycling | Cycling (120° offset) | Rainbow border + digit hue rotation |
 | `green_lava` | Green | Teal | Lava blobs + shimmer combined |
+| `matrix_terminal` | Phosphor green | Dim green | Falling code rain + scanlines |
 
 ---
 
@@ -79,6 +80,8 @@ config.yaml → Clock Main Loop (10 FPS)
 - **gradient_sweep** - Horizontal gradient line sweeps top to bottom (30s period)
 - **aurora** - Slow shifting color bands (60s cycle)
 - **lava** - Two overlapping sine patterns create morphing blobs
+- **matrix_rain** - Falling code-rain streaks, one per column, bright head with fading trail
+- **scanlines** - Faint horizontal bands on every Nth row, CRT-style
 
 ### Color Effects (modify digit colors)
 - **rainbow** - Digits cycle through HSV spectrum (6s rotation)

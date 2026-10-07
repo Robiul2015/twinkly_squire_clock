@@ -290,6 +290,7 @@ In `config/config.yaml`, set the `theme` field. Available themes:
 | `ice_crystal` | Cold whites with sparkle |
 | `rainbow_shift` | Digits cycle full spectrum |
 | `green_lava` | Green digits with lava background |
+| `matrix_terminal` | Phosphor green with scanlines and falling code rain |
 
 No restart needed — theme hot-reloads within 60 seconds.
 
