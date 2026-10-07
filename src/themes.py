@@ -219,7 +219,7 @@ LEAF_HORIZON = {
     "effects": {
         "adaptive": True,
         "periods": [
-            (6, "mint_dawn", "#B8E8CC", "#060C08", 0.70),
+            (6, "mint_dawn", "#8FDDA8", "#060C08", 0.70),
             (9, "fresh_leaf", "#8EDFA6", "#050A06", 0.85),
             (16, "mossy_gold", "#C7D98A", "#0A0A04", 0.75),
             (19, "forest_dusk", "#5E9E79", "#060B08", 0.45),
