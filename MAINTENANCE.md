@@ -293,6 +293,7 @@ In `config/config.yaml`, set the `theme` field. Available themes:
 | `rainbow_shift` | Digits cycle full spectrum |
 | `green_lava` | Green digits with lava background |
 | `matrix_terminal` | Phosphor green with scanlines and falling code rain |
+| `leaf_horizon` | Soothing green that shifts through 5 phases over the day |
 
 No restart needed — theme hot-reloads within 60 seconds.
 

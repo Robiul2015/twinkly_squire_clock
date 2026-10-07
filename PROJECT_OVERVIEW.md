@@ -45,7 +45,7 @@ config.yaml → Clock Main Loop (10 FPS)
 
 ---
 
-## Themes (14 total)
+## Themes (15 total)
 
 | Theme | Hours | Minutes | Effect |
 |---|---|---|---|
@@ -63,6 +63,7 @@ config.yaml → Clock Main Loop (10 FPS)
 | `rainbow_shift` | Cycling | Cycling (120° offset) | Rainbow border + digit hue rotation |
 | `green_lava` | Green | Teal | Lava blobs + shimmer combined |
 | `matrix_terminal` | Phosphor green | Dim green | Falling code rain + scanlines |
+| `leaf_horizon` | Adaptive green | Adaptive green | 5-phase day cycle: dawn, leaf, gold, dusk, pine |
 
 ---
 
