@@ -73,7 +73,12 @@ Three built-in 5x7 pixel fonts, selectable in config:
    cd twinkly_squire_clock
    ```
 
-2. Edit `config/config.yaml` with your Twinkly IP address:
+2. Create your config from the template and set your Twinkly IP address
+   (`config/config.yaml` is gitignored, so your IP and location never get
+   committed):
+   ```bash
+   cp config/config.yaml.example config/config.yaml
+   ```
    ```yaml
    twinkly_ip: "192.168.1.100"
    theme: "forest_canopy"
@@ -105,7 +110,7 @@ Three built-in 5x7 pixel fonts, selectable in config:
 
 ## Configuration
 
-All settings in `config/config.yaml`:
+All settings in `config/config.yaml` (copy from `config/config.yaml.example`, which is tracked; your filled-in `config.yaml` is gitignored):
 
 ```yaml
 twinkly_ip: "192.168.1.100"    # Device IP

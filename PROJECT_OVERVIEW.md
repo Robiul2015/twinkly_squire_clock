@@ -161,7 +161,7 @@ config.yaml → Clock Main Loop (10 FPS)
 
 | Setting | Default | Description |
 |---|---|---|
-| `twinkly_ip` | `192.168.1.100` | Device IP address |
+| `twinkly_ip` | *(set your own)* | Device IP address, see `config/config.yaml.example` |
 | `theme` | `ocean_drift` | Active theme (hot-reloaded) |
 | `brightness` | 80 | Default brightness 0-100 |
 | `fps` | 10 | Frames per second |

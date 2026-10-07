@@ -1,0 +1,37 @@
+# Twinkly Squares Wall Clock Configuration
+# Copy this file to config.yaml and fill in your own values — config.yaml is
+# gitignored so your device IP and location never get committed.
+#
+# Changes to theme are hot-reloaded every 60 seconds (no restart needed).
+
+twinkly_ip: "192.168.1.100"
+
+# Available: ocean_drift, ember_glow, neon_synthwave, minimal_white,
+#            aurora_borealis, time_of_day, sunset_boulevard, cyberpunk_tokyo,
+#            forest_canopy, lava_lamp, ice_crystal, rainbow_shift, green_lava,
+#            matrix_terminal
+theme: "ocean_drift"
+
+brightness: 80
+fps: 10
+
+# Font: 5x7 (classic), 5x7r (rounded), 5x7b (bold)
+font: "5x7"
+
+# Night mode: dims to night_brightness from night_start until sunrise
+# Sunrise is calculated automatically for your location
+night_brightness: 20    # % during night
+night_start: 22         # 10 PM
+
+# Your location (for sunrise calculation) — set this to your own city
+location:
+  name: "Your City"
+  region: "Your Country"
+  latitude: 0.0
+  longitude: 0.0
+  timezone: "UTC"
+
+# Daytime brightness schedule (24h format, applies after sunrise)
+brightness_schedule:
+  8: 80     # 8 AM - full brightness
+  20: 50    # 8 PM - evening dim

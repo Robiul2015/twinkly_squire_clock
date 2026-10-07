@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 venv/
 .venv/
+
+# Per-device config — contains real device IP and location, never commit this.
+# Copy config.yaml.example to config.yaml and fill in your own values.
+config/config.yaml
+config/config.yaml.backup

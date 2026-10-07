@@ -4,9 +4,9 @@ Two deployment targets: **Raspberry Pi Zero W** (primary) and **Synology DS720+ 
 
 | | Pi Zero W | Synology NAS |
 |---|---|---|
-| **Host IP** | 192.168.1.101 | NAS IP |
-| **Twinkly IP** | 192.168.1.100 | 192.168.1.100 |
-| **App location** | /home/pi/twinkly-clock | /volume1/docker/twinkly-clock |
+| **Host IP** | your Pi's IP | NAS IP |
+| **Twinkly IP** | your device IP | your device IP |
+| **App location** | /home/pi/twinkly_squire_clock | /volume1/docker/twinkly-clock |
 | **Runs via** | systemd service | Docker Compose |
 
 ---
@@ -16,7 +16,7 @@ Two deployment targets: **Raspberry Pi Zero W** (primary) and **Synology DS720+ 
 ### SSH In
 
 ```bash
-ssh pi@192.168.1.101
+ssh pi@<pi-ip>
 ```
 
 ### Check Status
@@ -56,7 +56,7 @@ sudo systemctl start twinkly-clock
 Edit the config file — the app hot-reloads theme changes every 60 seconds, no restart needed:
 
 ```bash
-nano /home/pi/twinkly-clock/config/config.yaml
+nano /home/pi/twinkly_squire_clock/config/config.yaml
 ```
 
 Changes to `fps`, `night_brightness`, `night_start`, or `brightness_schedule` require a restart:
@@ -68,7 +68,7 @@ sudo systemctl restart twinkly-clock
 ### Update Code
 
 ```bash
-cd /home/pi/twinkly-clock
+cd /home/pi/twinkly_squire_clock
 git pull
 sudo systemctl restart twinkly-clock
 ```
@@ -76,7 +76,7 @@ sudo systemctl restart twinkly-clock
 ### Update Python Dependencies
 
 ```bash
-cd /home/pi/twinkly-clock
+cd /home/pi/twinkly_squire_clock
 source venv/bin/activate
 pip install -r requirements.txt
 deactivate
@@ -88,8 +88,8 @@ sudo systemctl restart twinkly-clock
 ```bash
 # Clone the repo
 cd /home/pi
-git clone https://github.com/Robiul2015/twinkly_squire_clock.git twinkly-clock
-cd twinkly-clock
+git clone https://github.com/Robiul2015/twinkly_squire_clock.git twinkly_squire_clock
+cd twinkly_squire_clock
 
 # Create venv and install dependencies
 python3 -m venv venv
@@ -97,7 +97,8 @@ source venv/bin/activate
 pip install -r requirements.txt
 deactivate
 
-# Edit config
+# Create and edit your config (config.yaml is gitignored, never committed)
+cp config/config.yaml.example config/config.yaml
 nano config/config.yaml
 
 # Install and start the service
@@ -135,7 +136,7 @@ systemd already auto-restarts the service on crash, but if it hits a hard failur
 
 ```bash
 # Copy the watchdog script
-sudo cp /home/pi/twinkly-clock/scripts/watchdog.sh /usr/local/bin/twinkly-watchdog.sh
+sudo cp /home/pi/twinkly_squire_clock/scripts/watchdog.sh /usr/local/bin/twinkly-watchdog.sh
 sudo chmod +x /usr/local/bin/twinkly-watchdog.sh
 
 # Add to root's crontab (runs every 5 minutes)
@@ -261,6 +262,7 @@ docker compose up -d
 cd /volume1/docker
 git clone https://github.com/Robiul2015/twinkly_squire_clock.git twinkly-clock
 cd twinkly-clock
+cp config/config.yaml.example config/config.yaml
 nano config/config.yaml          # Set your twinkly_ip
 nano docker-compose.yml          # Set your timezone
 docker compose build
@@ -324,7 +326,7 @@ Requires a restart.
 ### Twinkly Device Not Responding
 
 1. Check the Twinkly device is powered on and connected to WiFi
-2. Ping it: `ping 192.168.1.100`
+2. Ping it: `ping <twinkly-ip>`
 3. If the IP changed, update `twinkly_ip` in `config/config.yaml` and restart
 4. The app auto-reconnects with exponential backoff — check logs for connection errors
 

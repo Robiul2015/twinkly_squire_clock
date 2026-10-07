@@ -33,11 +33,11 @@ DEFAULT_CONFIG = {
     "night_brightness": 20,
     "night_start": 22,           # 10 PM
     "location": {
-        "name": "Sydney",
-        "region": "Australia",
+        "name": "Greenwich",
+        "region": "UK",
         "latitude": 51.4934,
         "longitude": 0.0,
-        "timezone": "Australia/Sydney",
+        "timezone": "UTC",
     },
     "brightness_schedule": {8: 80, 20: 50},
 }
@@ -65,9 +65,9 @@ def get_sunrise_hour(config):
     try:
         loc_cfg = config.get("location", {})
         city = LocationInfo(
-            loc_cfg.get("name", "Sydney"),
-            loc_cfg.get("region", "Australia"),
-            loc_cfg.get("timezone", "Australia/Sydney"),
+            loc_cfg.get("name", "Greenwich"),
+            loc_cfg.get("region", "UK"),
+            loc_cfg.get("timezone", "UTC"),
             loc_cfg.get("latitude", 51.4934),
             loc_cfg.get("longitude", 0.0),
         )
