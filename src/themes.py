@@ -203,6 +203,31 @@ TIME_OF_DAY = {
 # New themes
 # ---------------------------------------------------------------------------
 
+LEAF_HORIZON = {
+    "name": "Leaf Horizon",
+    "description": "Soothing green palette that shifts through the day, dawn to night",
+    "colors": {
+        "background": hex_to_rgb("#050A06"),
+        "hours": hex_to_rgb("#8EDFA6"),
+        "minutes": hex_to_rgb("#71B284"),
+        "seconds": hex_to_rgb("#47704F"),
+        "colon": hex_to_rgb("#A0E8B4"),
+        "ampm": hex_to_rgb("#386B48"),
+        "date": hex_to_rgb("#2A4F35"),
+        "border": hex_to_rgb("#050A06"),
+    },
+    "effects": {
+        "adaptive": True,
+        "periods": [
+            (6, "mint_dawn", "#B8E8CC", "#060C08", 0.70),
+            (9, "fresh_leaf", "#8EDFA6", "#050A06", 0.85),
+            (16, "mossy_gold", "#C7D98A", "#0A0A04", 0.75),
+            (19, "forest_dusk", "#5E9E79", "#060B08", 0.45),
+            (22, "deep_pine", "#3A6A4C", "#020503", 0.12),
+        ],
+    },
+}
+
 SUNSET_BOULEVARD = {
     "name": "Sunset Boulevard",
     "description": "Warm golden hour gradient",
@@ -422,6 +447,7 @@ THEMES = {
     "rainbow_shift": RAINBOW_SHIFT,
     "green_lava": GREEN_LAVA,
     "matrix_terminal": MATRIX_TERMINAL,
+    "leaf_horizon": LEAF_HORIZON,
 }
 
 
